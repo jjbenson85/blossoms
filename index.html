@@ -7,13 +7,9 @@
     <title>Blossoms</title>
     <link rel="stylesheet" href="css/normalize.css" />
     <link id="blossoms-css" rel="stylesheet" href="css/blossoms.css" />
-    <link id="theme-css" rel="stylesheet" href="css/blank-theme.css" />
+    <link id="theme-css" rel="stylesheet" href="css/blank-theme.css" onload="updateSliders()" />
 </head>
 <style>
-    .page>* {
-        transition: color 0.4s ease-in, background-color 0.4s ease-in;
-    }
-
     #top {
         padding-top: 40px;
     }
@@ -22,33 +18,92 @@
         position: fixed;
         right: 16px;
         top: 8px;
+        z-index: 100;
+    }
+
+    #controls fieldset {
         background-color: var(--color-bg, white);
+    }
+
+    .color-display {
+        display: inline-block;
+        height: 32px;
+        width: 32px;
+        margin: 0 8px;
     }
 </style>
 <script charset="utf-8">
+    const cssVars = [
+        'accent-hue-offset',
+        'color-bg',
+        'color-bg-alt',
+        'color-text',
+        'color-text-alt',
+        'luminance',
+        'primary-hue',
+        'saturation',
+        'secondary-hue-offset',
+    ]
+    const root = document.querySelector(':root')
+    const computedStyle = getComputedStyle(root)
+
+    const copyToClipboard = () => {
+        const strArr = cssVars.map((cssVar) => {
+            const prop = '--' + cssVar
+            const val = computedStyle.getPropertyValue(prop).trim()
+            return `\t${prop}: ${val};`
+        })
+        const cssThemeString = ':root {\n' + strArr.join('\n') + "\n}"
+
+        navigator.clipboard.writeText(cssThemeString).then(function () {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function (err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+    const getRootCssVar = (cssVar) => {
+        const computedStyle = getComputedStyle(root)
+
+        return computedStyle.getPropertyValue('--' + cssVar)
+    }
+    function updateSliders() {
+        cssVars.forEach((cssVar) => {
+            const prop = '--' + cssVar
+            const val = computedStyle.getPropertyValue(prop)
+            const cleanedVal = val.replace("%", "").trim()
+            document.querySelector(`#${cssVar}-input`).value = cleanedVal
+        })
+    }
     const toggleBlossoms = (isChecked) => {
         document.querySelector("#blossoms-css").disabled = !isChecked
     }
-    const selectTheme = (select) => {
-        document.querySelector("#theme-css").href = 'css/' + select.value;
+    const setRootCssVar = (cssVar, value) => {
+        document.querySelector(':root').style.setProperty('--' + cssVar, value);
     }
-    const pickColor = (colorVar, picker) => {
-        document.querySelector(':root').style.setProperty('--' + colorVar, picker.value);
+
+    const loadCssTheme = (str) => {
+        // Clone link so onload event fires when loaded
+        const style = document.querySelector("#theme-css")
+        const newStyle = style.cloneNode()
+        newStyle.href = 'css/' + str;
+        style.replaceWith(newStyle)
     }
 </script>
 
 <body>
     <div id="controls">
-        <form>
+        <form onsubmit="event.preventDefault()">
             <fieldset>
-                <legend>Controls</legend>
+                <legend>Theme</legend>
                 <label for="toggle-blossoms"><input id="toggle-blossoms" name="checkbox" type="checkbox"
                         checked="checked" onclick='toggleBlossoms(this.checked);' />
                     Toggle blossoms.css on/off</label>
                 <label for="select">Select Theme</label>
-                <select id="select-theme" onchange="selectTheme(this)">
+                <select id="select-theme" onchange="loadCssTheme(this.value)">
                     <optgroup label="Blossom Themes">
                         <option value="blank-theme.css">Blossoms (default)</option>
+                        <option value="blossoms-dark.css">Blossoms Dark</option>
+                        <option value="blossoms-autumn.css">Blossoms Autumn</option>
                     </optgroup>
                     <optgroup label="Sakura Themes">
                         <option value="sakura-earthly.css">Sakura Earthly</option>
@@ -57,19 +112,51 @@
                         <option value="dark-solarized.css">Sakura Dark Solarized</option>
                     </optgroup>
                 </select>
-                <label for="select">Primary Color
-                    <input type="color" name="primary" id="primary-color-picker" oninput="pickColor('primary',this)">
+            </fieldset>
+            <fieldset>
+                <button onclick="copyToClipboard()">Copy To Clipboard</button>
+                <legend>Custom Theme</legend>
+                <label for="select">Saturation
+                    <input type="range" name="saturation" id="saturation-input"
+                        oninput="setRootCssVar('saturation',this.value+'%')" min="0" max="100">
                 </label>
-                <label for="select">Secondary Color
-                    <input type="color" name="secondary" id="secondary-color-picker"
-                        oninput="pickColor('secondary',this)">
+                <label for="select">Luminance
+                    <input type="range" name="luminance" id="luminance-input"
+                        oninput="setRootCssVar('luminance',this.value+'%')" min="0" max="100">
                 </label>
-                <label for="select">Accent Color
-                    <input type="color" name="accent" id="accent-color-picker" oninput="pickColor('accent',this)">
+                <label for="select">Primary Hue
+                    <div id="colorDisplay" class="color-display" style="background-color: var(--primary)"></div>
+                    <input type="range" name="primary-hue" id="primary-hue-input"
+                        oninput="setRootCssVar('primary-hue',this.value)" min="0" max="360">
                 </label>
-                <label for="select">Background Color
-                    <input type="color" name="background" id="background-color-picker"
-                        oninput="pickColor('color-bg',this)">
+                <label for="select">Secondary Hue Offset
+                    <div class="color-display" style="background-color: var(--secondary)"></div>
+                    <input type="range" name="hue" id="secondary-hue-offset-input"
+                        oninput="setRootCssVar('secondary-hue-offset',this.value)" min="-180" max="180" value=0>
+                </label>
+                <label for="select">Accent Hue Offset
+                    <div class="color-display" style="background-color: var(--accent)"></div>
+                    <input type="range" name="hue" id="accent-hue-offset-input"
+                        oninput="setRootCssVar('accent-hue-offset',this.value)" min="-180" max="180" value=0>
+                </label>
+
+                <hr />
+                <label for="color-bg">Background Color
+                    <input type="color" name="color-bg" id="color-bg-input"
+                        oninput="setRootCssVar('color-bg',this.value)">
+                </label>
+                <label for="color-text">Text Color
+                    <input type="color" name="color-text" id="color-text-input"
+                        oninput="setRootCssVar('color-text',this.value)">
+                </label>
+                <hr />
+                <label for="color-bg-alt">Alt Background Color
+                    <input type="color" name="color-bg-alt" id="color-bg-alt-input"
+                        oninput="setRootCssVar('color-bg-alt',this.value)">
+                </label>
+                <label for="color-text-alt">Alt Text Color
+                    <input type="color" name="color-text-alt" id="color-text-alt-input"
+                        oninput="setRootCssVar('color-text-alt',this.value)">
                 </label>
             </fieldset>
         </form>

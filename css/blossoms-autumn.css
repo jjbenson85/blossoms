@@ -1,0 +1,11 @@
+:root {
+  --primary-hue: 32;
+  --saturation: 90%;
+  --luminance: 35%;
+  --secondary-hue-offset: 20;
+  --accent-hue-offset: 140;
+  --color-bg: #f5f5f5;
+  --color-bg-alt: #eeeeee;
+  --color-text: #424242;
+  --color-text-alt: #424242;
+}
