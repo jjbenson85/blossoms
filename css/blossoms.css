@@ -60,13 +60,13 @@ html {
 }
 
 body {
-  font-size: var(--font-size-base, 1.8rem);
-  line-height: var(--body-line-height, 1.618);
-  max-width: var(--body-max-width, 38rem);
+  font-size: var(--font-size-base);
+  line-height: var(--body-line-height);
+  max-width: var(--body-max-width);
   margin: auto;
-  color: var(--color-text, #424242);
-  background-color: var(--color-bg, #f5f5f5);
-  padding: var(--body-padding, 14px);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  padding: var(--body-padding);
 }
 
 @media (max-width: 684px) {
@@ -135,7 +135,7 @@ sup {
 }
 
 hr {
-  border-top: 1px solid var(--primary, #1d7484);
+  border-top: 1px solid var(--primary);
 }
 
 a {
@@ -194,7 +194,7 @@ blockquote {
   padding-top: 0.8em;
   padding-bottom: 0.8em;
   padding-right: 0.8em;
-  border-left: 5px solid var(--accent, #1d7484);
+  border-left: 5px solid var(--primary);
   margin-bottom: 2.5rem;
   background-color: var(--color-bg-alt);
   color: var(--color-text-alt);
@@ -254,7 +254,7 @@ th {
 input,
 textarea {
   border: 1px solid var(--color-text);
-  border-radius: var(--border-radius__lg, 8px);
+  border-radius: var(--border-radius__lg);
 }
 /* input:focus,
 textarea:focus {
@@ -276,10 +276,10 @@ input[type="button"] {
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
-  background-color: var(--primary, #1d7484);
+  background-color: var(--primary);
   color: var(--color-bg);
-  border-radius: var(--border-radius__sm, 4px);
-  border: 1px solid var(--primary, #1d7484);
+  border-radius: var(--border-radius__sm);
+  border: 1px solid var(--primary);
   cursor: pointer;
   box-sizing: border-box;
 }
@@ -301,8 +301,8 @@ input[type="reset"]:focus:enabled,
 input[type="reset"]:hover:enabled,
 input[type="button"]:focus:enabled,
 input[type="button"]:hover:enabled {
-  background-color: var(--secondary, #982c61);
-  border-color: var(--secondary, #982c61);
+  background-color: var(--secondary);
+  border-color: var(--secondary);
   color: var(--color-bg);
   outline: 0;
 }
@@ -316,7 +316,7 @@ input {
   background-color: var(--color-bg-alt);
   color: var(--color-text-alt);
   border: 1px solid var(--color-bg-alt);
-  border-radius: var(--border-radius__sm, 4px);
+  border-radius: var(--border-radius__sm);
   box-shadow: none;
   box-sizing: border-box;
 }
@@ -336,12 +336,12 @@ fieldset {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  border-radius: var(--border-radius__sm, 4px);
+  border-radius: var(--border-radius__sm);
 }
 
 *:focus {
-  outline: 2px solid var(--primary, #1d7484);
-  border-radius: var(--border-radius__sm, 4px);
+  outline: 2px solid var(--primary);
+  border-radius: var(--border-radius__sm);
   outline-offset: 4px;
 }
 input[type="checkbox"]:focus {
