@@ -16,6 +16,12 @@
   --accent-hue: calc(var(--primary-hue) + var(--accent-hue-offset));
 
   --primary: hsla(var(--primary-hue), var(--saturation), var(--luminance), 1);
+  --primary--brighten-10: hsla(
+    var(--primary-hue),
+    var(--saturation),
+    calc(var(--luminance) + 10%),
+    1
+  );
   --secondary: hsla(
     var(--secondary-hue),
     var(--saturation),
@@ -38,7 +44,7 @@
   --border-radius__sm: 4px;
   --border-radius__lg: 8px;
   --color-bg: var(--grey-lighten-4);
-  --color-bg-alt: var(--grey-lighten-3);
+  --color-bg-alt: var(--grey-lighten-1);
 
   --color-text: var(--grey-darken-3);
   --color-text-alt: var(--grey-darken-3);
@@ -52,6 +58,8 @@
   --body-line-height: 1.618;
   --body-max-width: 38em;
   --body-padding: 14px;
+
+  --shadow: 8px 8px 8px hsla(0, 0%, 0%, 0.2);
 }
 html {
   font-size: 62.5%;
@@ -82,8 +90,8 @@ body {
 }
 
 header {
-  background-color: var(--color-bg-alt);
-  color: var(--color-text-alt);
+  background-color: var(--primary);
+  color: var(--color-bg);
   padding: 16px 16px 8px 16px;
   margin-bottom: 8px;
   border-radius: var(--border-radius__lg);
@@ -105,6 +113,15 @@ h6 {
   word-wrap: break-word;
   -ms-word-break: break-all;
   word-break: break-word;
+}
+
+header h1,
+header h2,
+header h3,
+header h4,
+header h5,
+header h6 {
+  color: var(--color-bg);
 }
 
 h1 {
@@ -156,22 +173,16 @@ a:before {
   position: absolute;
   width: 0;
   height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: var(--primary);
+  bottom: 4px;
+  /* left: -12px; */
+  background-color: white;
+  /* background-color: whitevar(--primary); */
   visibility: hidden;
   transition: all 0.3s ease-in-out;
 }
 a:hover:before {
   visibility: visible;
   width: 100%;
-}
-a:hover:visited,
-a:hover {
-  /* text-decoration: underline; */
-  /* color: var(--secondary, #982c61); */
-  /* border-bottom: 2px solid var(--color-text); */
-  /* text-decoration-color: var(--secondary); */
 }
 a:visited {
   color: hsla(
@@ -192,7 +203,86 @@ li {
   margin-bottom: 0.4em;
 }
 li::marker {
-  color: var(--accent);
+  color: var(--primary);
+}
+
+nav > ul {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  max-width: var(--body-max-width);
+  padding-left: 0;
+}
+
+nav ul > li {
+  display: flex;
+  list-style: none;
+  transition: background-color 0.4s;
+  background-color: hsla(
+    var(--primary-hue),
+    var(--saturation),
+    calc(var(--luminance) + 0%),
+    1
+  );
+  padding: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+nav ul > li:hover {
+  background-color: var(--primary--brighten-10);
+}
+
+nav ul > li > a:visited,
+nav ul > li > a {
+  color: white;
+  width: 100%;
+  flex: 1;
+}
+
+nav > ul > li {
+  border-radius: var(--border-radius__sm);
+  flex: 1;
+  position: relative;
+}
+
+nav > ul > li:hover {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+nav > ul > li > ul {
+  /* box-shadow: var(--shadow); */
+  border-radius: var(--border-radius__sm);
+  height: 0;
+  left: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  text-align: left;
+  top: 19px;
+  transition: top 0.4s, opacity 0.4s;
+}
+
+nav > ul > li:hover > ul {
+  height: unset;
+  list-style: inside;
+  opacity: 1;
+  overflow: unset;
+  top: 29px;
+}
+
+nav > ul > li > ul > li {
+  background-color: var(--primary);
+  line-height: calc(var(--body-line-height) + 0.5);
+  margin: 0;
+}
+
+nav > ul > li > ul > li:last-of-type {
+  border-bottom-left-radius: var(--border-radius__sm);
+  border-bottom-right-radius: var(--border-radius__sm);
 }
 
 blockquote {
@@ -309,8 +399,8 @@ input[type="reset"]:focus:enabled,
 input[type="reset"]:hover:enabled,
 input[type="button"]:focus:enabled,
 input[type="button"]:hover:enabled {
-  background-color: var(--secondary);
-  border-color: var(--secondary);
+  background-color: var(--primary--brighten-10);
+  border-color: var(--primary--brighten-10);
   color: var(--color-bg);
   outline: 0;
 }
@@ -321,12 +411,17 @@ input {
   padding: 6px 10px;
   /* The 6px vertically centers text on FF, ignored by Webkit */
   margin-bottom: 10px;
-  background-color: var(--color-bg-alt);
-  color: var(--color-text-alt);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   border: 1px solid var(--color-bg-alt);
   border-radius: var(--border-radius__sm);
   box-shadow: none;
   box-sizing: border-box;
+}
+
+textarea {
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-alt);
 }
 /* textarea:focus,
 select:focus,
