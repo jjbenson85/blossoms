@@ -34,7 +34,6 @@
 </style>
 <script charset="utf-8">
     const cssVars = [
-        'accent-hue-offset',
         'color-bg',
         'color-bg-alt',
         'color-text',
@@ -42,7 +41,6 @@
         'luminance',
         'primary-hue',
         'saturation',
-        'secondary-hue-offset',
     ]
     const root = document.querySelector(':root')
     const computedStyle = getComputedStyle(root)
@@ -128,16 +126,6 @@
                     <div id="colorDisplay" class="color-display" style="background-color: var(--primary)"></div>
                     <input type="range" name="primary-hue" id="primary-hue-input"
                         oninput="setRootCssVar('primary-hue',this.value)" min="0" max="360">
-                </label>
-                <label for="select">Secondary Hue Offset
-                    <div class="color-display" style="background-color: var(--secondary)"></div>
-                    <input type="range" name="hue" id="secondary-hue-offset-input"
-                        oninput="setRootCssVar('secondary-hue-offset',this.value)" min="-180" max="180" value=0>
-                </label>
-                <label for="select">Accent Hue Offset
-                    <div class="color-display" style="background-color: var(--accent)"></div>
-                    <input type="range" name="hue" id="accent-hue-offset-input"
-                        oninput="setRootCssVar('accent-hue-offset',this.value)" min="-180" max="180" value=0>
                 </label>
 
                 <hr />
